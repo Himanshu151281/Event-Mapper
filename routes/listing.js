@@ -9,56 +9,71 @@ const { storage } = require("../cloudConfig.js");
 const router = express.Router();
 const upload = multer({ storage });
 
-router
-  .route("/")
-  .get(wrapAsync(listingController.index))
-  .post(
-    isLoggedIn,
-    upload.single("listing[image]"),
-    validateListing,
-    wrapAsync(listingController.createListing)
+module.exports = (io) => {
+  router
+    .route("/")
+    .get(wrapAsync(listingController.index))
+    .post(
+      isLoggedIn,
+      upload.single("listing[image]"),
+      validateListing,
+      wrapAsync(listingController.createListing)
+    );
+
+  router.route("/new").get(isLoggedIn, listingController.renderNewForm);
+
+  router.get(
+    "/dashboard",
+    wrapAsync(async (req, res) => {
+      const { category, startDate, endDate } = req.query;
+      let filter = {};
+
+      if (category) {
+        filter.category = category;
+      }
+      if (startDate || endDate) {
+        filter.date = {};
+        if (startDate) {
+          filter.date.$gte = new Date(startDate);
+        }
+        if (endDate) {
+          filter.date.$lte = new Date(endDate);
+        }
+      }
+
+      const listings = await Listing.find(filter);
+      res.render("listings/dashboard.ejs", { listings });
+    })
   );
 
-router.route("/new").get(isLoggedIn, listingController.renderNewForm);
+  router
+    .route("/:id/edit")
+    .get(isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
-router.get(
-  "/dashboard",
-  wrapAsync(async (req, res) => {
-    const { category, startDate, endDate } = req.query;
-    let filter = {};
-
-    if (category) {
-      filter.category = category;
-    }
-    if (startDate || endDate) {
-      filter.date = {};
-      if (startDate) {
-        filter.date.$gte = new Date(startDate);
-      }
-      if (endDate) {
-        filter.date.$lte = new Date(endDate);
-      }
-    }
-
-    const listings = await Listing.find(filter);
-    res.render("listings/dashboard.ejs", { listings });
-  })
-);
-
-router
-  .route("/:id/edit")
-  .get(isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
-
-router
-  .route("/:id")
-  .put(
+  router.post(
+    "/:id/attend",
     isLoggedIn,
-    isOwner,
-    upload.single("listing[image]"),
-    validateListing,
-    wrapAsync(listingController.updateListing)
-  )
-  .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing))
-  .get(wrapAsync(listingController.showListing));
+    wrapAsync(async (req, res) => {
+      const { id } = req.params;
+      const listing = await Listing.findById(id);
+      listing.attendees += 1;
+      await listing.save();
+      io.emit("updateAttendees", { id, attendees: listing.attendees });
+      res.redirect(`/listings/${id}`);
+    })
+  );
 
-module.exports = router;
+  router
+    .route("/:id")
+    .put(
+      isLoggedIn,
+      isOwner,
+      upload.single("listing[image]"),
+      validateListing,
+      wrapAsync(listingController.updateListing)
+    )
+    .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing))
+    .get(wrapAsync(listingController.showListing));
+
+  return router;
+};

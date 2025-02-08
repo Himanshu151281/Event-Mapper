@@ -17,8 +17,12 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStatergy = require("passport-local");
 const User = require("./models/user.js");
+const http = require("http");
+const socketIo = require("socket.io");
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 
 const dbUrl = process.env.ATLASDB_URL;
 
@@ -82,7 +86,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/listings", listingRouter);
+app.use("/listings", listingRouter(io));
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 
@@ -96,6 +100,14 @@ app.use((err, req, res, next) => {
 });
 
 const port = 8080;
-app.listen(8080, () => {
-  console.log(`server is listning on port ${port}`);
+server.listen(port, () => {
+  console.log(`server is listening on port ${port}`);
+});
+
+io.on("connection", (socket) => {
+  console.log("New client connected");
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
 });
