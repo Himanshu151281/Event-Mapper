@@ -69,13 +69,10 @@ module.exports.destroyListing = async (req, res) => {
 
 module.exports.showListing = async (req, res) => {
   let { id } = req.params;
-  const listing = await Listing.findById(id)
-    .populate({ path: "reviews", populate: { path: "author" } })
-    .populate("owner");
+  const listing = await Listing.findById(id).populate("owner");
   if (!listing) {
     req.flash("error", "Listing Not Exist!");
     res.redirect("/listings");
   }
-  // console.log(listing);
   res.render("listings/show.ejs", { listing });
 };
