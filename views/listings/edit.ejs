@@ -72,6 +72,28 @@
         />
         <div class="invalid-feedback">Location should be valid</div>
       </div>
+      <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <input
+          type="text"
+          name="listing[category]"
+          class="form-control"
+          value="<%= listing.category %>"
+          required
+        />
+        <div class="invalid-feedback">Category is required</div>
+      </div>
+      <div class="mb-3">
+        <label for="date" class="form-label">Date</label>
+        <input
+          type="date"
+          name="listing[date]"
+          class="form-control"
+          value="<%= listing.date.toISOString().split('T')[0] %>"
+          required
+        />
+        <div class="invalid-feedback">Date is required</div>
+      </div>
       <button class="btn btn-dark edit-btn mt-3 mb-5">EDIT</button>
     </form>
   </div>

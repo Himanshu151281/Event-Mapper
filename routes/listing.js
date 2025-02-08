@@ -21,6 +21,30 @@ router
 
 router.route("/new").get(isLoggedIn, listingController.renderNewForm);
 
+router.get(
+  "/dashboard",
+  wrapAsync(async (req, res) => {
+    const { category, startDate, endDate } = req.query;
+    let filter = {};
+
+    if (category) {
+      filter.category = category;
+    }
+    if (startDate || endDate) {
+      filter.date = {};
+      if (startDate) {
+        filter.date.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        filter.date.$lte = new Date(endDate);
+      }
+    }
+
+    const listings = await Listing.find(filter);
+    res.render("listings/dashboard.ejs", { listings });
+  })
+);
+
 router
   .route("/:id/edit")
   .get(isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
