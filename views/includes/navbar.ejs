@@ -1,0 +1,105 @@
+<style>
+  .search-btn {
+    background-color: #fe424d;
+    color: #fff;
+    border-radius: 25px;
+    padding: 0 1rem 0 1rem;
+  }
+  .search-btn:hover {
+    background-color: #fe424d;
+    color: #fff;
+  }
+  .search-btn i {
+    display: inline;
+    margin: 0.5rem;
+  }
+  .search-inp {
+    border-radius: 25px;
+    padding: 0.5rem 3rem 0.5rem 3rem;
+    font-size: 1rem;
+  }
+</style>
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/listings"
+      ><i class="fa-regular fa-compass"></i
+    ></a>
+    <button
+      class="navbar-toggler "
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse bg-white" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/listings">Explore</a>
+      </div>
+      <div class="navbar-nav ms-auto">
+        <form class="d-flex" role="search">
+          <input
+            class="form-control me-2 search-inp"
+            type="search"
+            placeholder="Search events.."
+          />
+          <button class="btn search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass" style="font-size: unset;"></i>Search
+          </button>
+        </form>
+      </div>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/listings/new">Host Event</a>
+
+        <% if(!currUser) {%>
+        <a class="nav-link" href="/signup"><b>Sign up</b></a>
+        <a class="nav-link" href="/login"><b>Log in</b></a>
+        <% } %> <% if(currUser) {%>
+        <a class="nav-link" href="/logout"><b>Log out</b></a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+      <li class="nav-item mt-2 mb-2">
+        <a class="nav-link" href="/listings">Explore</a>
+      </li>
+      <li class="mt-2 mb-2">
+
+        <form class="d-flex" role="search">
+          <input
+            class="form-control me-2 search-inp"
+            type="search"
+            placeholder="Search events.."
+          />
+          <button class="btn search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>Search
+          </button>
+        </form>
+      </li>
+      <li  class="mt-2 mb-2">
+
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link mt-2 mb-2" href="/listings/new">Host Event</a>
+  
+          <% if(!currUser) {%>
+          <a class="nav-link sign-btn signup-btn mt-2 mb-2" href="/signup"><b>Sign up</b></a>
+          <a class="nav-link sign-btn login-btn mt-2 mb-2" href="/login"><b>Log in</b></a>
+          <% } %> <% if(currUser) {%>
+          <a class="nav-link" href="/logout"><b>Log out</b></a>
+          <% } %>
+        </div>
+      </li>
+  </div>
+</div> -->
