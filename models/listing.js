@@ -45,6 +45,10 @@ const listingSchema = new Schema({
     type: Date,
     required: true,
   },
+  attendees: {
+    type: Number,
+    default: 0,
+  },
 });
 
 listingSchema.post("findOneAndDelete", async (listing) => {
