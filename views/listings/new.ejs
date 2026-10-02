@@ -1,9 +1,10 @@
 <% layout("/layouts/boilerplate") %>
 <div class="row">
-  <div class="col-8 offset-2">
-    <br />
-    <br />
-    <h3>Create New Event</h3>
+  <div class="col-lg-8 offset-lg-2">
+    <h1 class="h3 mt-5">Create a new event</h1>
+    <p class="text-muted">
+      Your event will appear on <a href="/listings">the events map</a> as soon as you publish it.
+    </p>
 
     <form
       action="/listings"
@@ -16,6 +17,7 @@
         <label for="title" class="form-label">Title</label>
         <input
           type="text"
+          id="title"
           name="listing[title]"
           placeholder="Add a catchy title"
           class="form-control"
@@ -27,6 +29,7 @@
       <div class="mb-3">
         <label for="description" class="form-label">Description</label>
         <textarea
+          id="description"
           name="listing[description]"
           class="form-control"
           required
@@ -35,14 +38,24 @@
       </div>
 
       <div class="mb-3">
-        <label for="image" class="form-label">Upload Listing Image</label>
-        <input type="file" name="listing[image]" class="form-control" />
-        required
+        <label for="image" class="form-label">Upload event image</label>
+        <input
+          type="file"
+          id="image"
+          name="listing[image]"
+          class="form-control"
+          accept="image/jpeg,image/png,image/jpg"
+          required
+        />
+        <div class="invalid-feedback">An image is required</div>
       </div>
       <div class="row">
         <div class="mb-3 col-md-4">
-          <label for="price" class="form-label">Price</label>
+          <label for="price" class="form-label">Price (&#8377; per day)</label>
           <input
+            type="number"
+            id="price"
+            min="0"
             placeholder="1200"
             name="listing[price]"
             class="form-control"
@@ -54,8 +67,9 @@
           <label for="country" class="form-label">Country</label>
           <input
             type="text"
+            id="country"
             name="listing[country]"
-            placeholder="india"
+            placeholder="India"
             class="form-control"
             required
           />
@@ -66,8 +80,9 @@
         <label for="location" class="form-label">Location</label>
         <input
           type="text"
+          id="location"
           name="listing[location]"
-          placeholder="Raipur, Chhattishgarh"
+          placeholder="Raipur, Chhattisgarh"
           class="form-control"
           required
         />
@@ -77,7 +92,9 @@
         <label for="category" class="form-label">Category</label>
         <input
           type="text"
+          id="category"
           name="listing[category]"
+          placeholder="Music, Workshop, Festival…"
           class="form-control"
           required
         />
@@ -85,12 +102,16 @@
       </div>
       <div class="mb-3">
         <label for="date" class="form-label">Date</label>
-        <input type="date" name="listing[date]" class="form-control" required />
+        <input
+          type="date"
+          id="date"
+          name="listing[date]"
+          class="form-control"
+          required
+        />
         <div class="invalid-feedback">Date is required</div>
       </div>
       <button class="btn btn-dark add-btn mb-5">Add</button>
-      <br />
-      <br />
     </form>
   </div>
 </div>

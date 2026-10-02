@@ -1,46 +1,73 @@
 <% layout("/layouts/boilerplate") %>
 <div class="row mt-3">
   <div class="col-12">
-    <h3>Event Dashboard</h3>
-    <form id="filter-form" class="mb-3">
+    <h1 class="h3">Event dashboard</h1>
+    <p class="text-muted">
+      Filter every event by category and date. Looking for something specific?
+      <a href="/listings">Browse all events</a>.
+    </p>
+
+    <form id="filter-form" class="mb-3" action="/listings/dashboard" method="GET">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 mb-2">
           <label for="category" class="form-label">Category</label>
           <input
             type="text"
             id="category"
             name="category"
             class="form-control"
+            value="<%= filters.category %>"
           />
         </div>
-        <div class="col-md-4">
-          <label for="startDate" class="form-label">Start Date</label>
+        <div class="col-md-4 mb-2">
+          <label for="startDate" class="form-label">Start date</label>
           <input
             type="date"
             id="startDate"
             name="startDate"
             class="form-control"
+            value="<%= filters.startDate %>"
           />
         </div>
-        <div class="col-md-4">
-          <label for="endDate" class="form-label">End Date</label>
-          <input type="date" id="endDate" name="endDate" class="form-control" />
+        <div class="col-md-4 mb-2">
+          <label for="endDate" class="form-label">End date</label>
+          <input
+            type="date"
+            id="endDate"
+            name="endDate"
+            class="form-control"
+            value="<%= filters.endDate %>"
+          />
         </div>
       </div>
       <button type="submit" class="btn btn-primary mt-3">Filter</button>
+      <a href="/listings/dashboard" class="btn btn-link mt-3">Reset</a>
     </form>
+
     <div id="events-list">
-      <% for(let listing of listings) { %>
-      <div class="card mb-3">
+      <% if (!listings.length) { %>
+      <p class="py-4">
+        No events match those filters. <a href="/listings/dashboard">Reset the filters</a> or
+        <a href="/listings/new">host an event</a>.
+      </p>
+      <% } %> <% for(let listing of listings) { %>
+      <article class="card mb-3">
         <div class="card-body">
-          <h5 class="card-title"><%= listing.title %></h5>
+          <h2 class="h5 card-title">
+            <a href="/listings/<%= listing.slug || listing._id %>" class="text-decoration-none"
+              ><%= listing.title %></a
+            >
+          </h2>
           <p class="card-text"><%= listing.description %></p>
           <p class="card-text"><b>Category:</b> <%= listing.category %></p>
           <p class="card-text">
-            <b>Date:</b> <%= listing.date.toDateString() %>
+            <b>Date:</b>
+            <time datetime="<%= listing.date.toISOString() %>"
+              ><%= listing.date.toDateString() %></time
+            >
           </p>
         </div>
-      </div>
+      </article>
       <% } %>
     </div>
   </div>

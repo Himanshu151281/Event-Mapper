@@ -1,12 +1,27 @@
 const mongoose = require("mongoose");
 const Review = require("./review.js");
+const { buildSlug } = require("../utils/slugify.js");
 
 const Schema = mongoose.Schema;
 
-const listingSchema = new Schema({
+const listingSchema = new Schema(
+  {
   title: {
     type: String,
     required: true,
+  },
+  // Human-readable URL segment, e.g. "diwali-night-market-4f1a2b".
+  slug: {
+    type: String,
+    index: true,
+    unique: true,
+    sparse: true,
+  },
+  // Last 6 characters of _id. Lets an outdated slug (the title was edited)
+  // still resolve to the right event so old links 301 instead of 404.
+  shortId: {
+    type: String,
+    index: true,
   },
   description: String,
   image: {
@@ -49,6 +64,17 @@ const listingSchema = new Schema({
     type: Number,
     default: 0,
   },
+  },
+  { timestamps: true }
+);
+
+// Keep the slug in step with the title on every save.
+listingSchema.pre("save", function (next) {
+  this.shortId = String(this._id).slice(-6);
+  if (this.isModified("title") || !this.slug) {
+    this.slug = buildSlug(this.title, this._id);
+  }
+  next();
 });
 
 listingSchema.post("findOneAndDelete", async (listing) => {

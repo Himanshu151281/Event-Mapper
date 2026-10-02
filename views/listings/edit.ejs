@@ -1,7 +1,10 @@
 <% layout("/layouts/boilerplate") %>
 <div class="row mt-3">
-  <div class="col-8 offset-2">
-    <h3>Edit Your Listing</h3>
+  <div class="col-lg-8 offset-lg-2">
+    <h1 class="h3">Edit your event</h1>
+    <p class="text-muted">
+      <a href="/listings/<%= listing.slug || listing._id %>">Back to “<%= listing.title %>”</a>
+    </p>
 
     <form
       method="POST"
@@ -14,6 +17,7 @@
         <label for="title" class="form-label">Title</label>
         <input
           type="text"
+          id="title"
           name="listing[title]"
           class="form-control"
           value="<%= listing.title %>"
@@ -24,24 +28,37 @@
       </div>
       <div class="mb-3">
         <label for="description" class="form-label">Description</label>
-        <textarea name="listing[description]" class="form-control" required>
-<%= listing.description %></textarea
-        >
+        <textarea id="description" name="listing[description]" class="form-control" required><%= listing.description %></textarea>
         <div class="invalid-feedback">Please enter short description</div>
       </div>
       <div class="mb-3">
-        Original Listingn Imgae <br />
-        <img src="<%= originalImageUrl %>" />
+        <p class="form-label mb-1">Current event image</p>
+        <img
+          src="<%= originalImageUrl %>"
+          width="250"
+          height="167"
+          loading="lazy"
+          decoding="async"
+          alt="Current image for <%= listing.title %>"
+        />
       </div>
       <div class="mb-3">
-        <label for="image" class="form-label">Upload New Image</label>
-        <input type="file" name="listing[image]" class="form-control" />
+        <label for="image" class="form-label">Upload new image</label>
+        <input
+          type="file"
+          id="image"
+          name="listing[image]"
+          class="form-control"
+          accept="image/jpeg,image/png,image/jpg"
+        />
       </div>
       <div class="row">
         <div class="mb-3 col-md-4">
-          <label for="price" class="form-label">Price</label>
+          <label for="price" class="form-label">Price (&#8377; per day)</label>
           <input
             type="number"
+            id="price"
+            min="0"
             name="listing[price]"
             class="form-control"
             value="<%= listing.price %>"
@@ -53,6 +70,7 @@
           <label for="country" class="form-label">Country</label>
           <input
             type="text"
+            id="country"
             name="listing[country]"
             class="form-control"
             value="<%= listing.country %>"
@@ -65,6 +83,7 @@
         <label for="location" class="form-label">Location</label>
         <input
           type="text"
+          id="location"
           name="listing[location]"
           class="form-control"
           value="<%= listing.location %>"
@@ -76,6 +95,7 @@
         <label for="category" class="form-label">Category</label>
         <input
           type="text"
+          id="category"
           name="listing[category]"
           class="form-control"
           value="<%= listing.category %>"
@@ -87,6 +107,7 @@
         <label for="date" class="form-label">Date</label>
         <input
           type="date"
+          id="date"
           name="listing[date]"
           class="form-control"
           value="<%= listing.date.toISOString().split('T')[0] %>"
@@ -94,7 +115,7 @@
         />
         <div class="invalid-feedback">Date is required</div>
       </div>
-      <button class="btn btn-dark edit-btn mt-3 mb-5">EDIT</button>
+      <button class="btn btn-dark edit-btn mt-3 mb-5">Save changes</button>
     </form>
   </div>
 </div>

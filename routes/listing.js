@@ -5,6 +5,7 @@ const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 const listingController = require("../controllers/listings.js");
 const multer = require("multer");
 const { storage } = require("../cloudConfig.js");
+const { buildSeo } = require("../utils/seo.js");
 
 const router = express.Router();
 const upload = multer({ storage });
@@ -41,8 +42,19 @@ module.exports = (io) => {
         }
       }
 
-      const listings = await Listing.find(filter);
-      res.render("listings/dashboard.ejs", { listings });
+      const listings = await Listing.find(filter).sort({ date: 1 });
+      res.render("listings/dashboard.ejs", {
+        listings,
+        filters: { category: category || "", startDate: startDate || "", endDate: endDate || "" },
+        // A filtered view of the same events as /listings: crawlable for its
+        // links, but kept out of the index to avoid duplicate content.
+        seo: buildSeo({
+          title: "Event Dashboard",
+          description:
+            "Filter every event on Event Mapper by category and date range to find what is on when you are free.",
+          path: "/listings/dashboard",
+        }),
+      });
     })
   );
 
@@ -56,13 +68,18 @@ module.exports = (io) => {
     wrapAsync(async (req, res) => {
       const { id } = req.params;
       const listing = await Listing.findById(id);
+      if (!listing) {
+        req.flash("error", "That event does not exist or has been removed.");
+        return res.redirect("/listings");
+      }
       listing.attendees += 1;
       await listing.save();
       io.emit("updateAttendees", { id, attendees: listing.attendees });
-      res.redirect(`/listings/${id}`);
+      res.redirect(listingController.listingPath(listing));
     })
   );
 
+  // Owner-only actions stay keyed on the immutable ObjectId.
   router
     .route("/:id")
     .put(
@@ -72,8 +89,10 @@ module.exports = (io) => {
       validateListing,
       wrapAsync(listingController.updateListing)
     )
-    .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing))
-    .get(wrapAsync(listingController.showListing));
+    .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
+
+  // The public, indexable URL uses the readable slug.
+  router.get("/:slug", wrapAsync(listingController.showListing));
 
   return router;
 };

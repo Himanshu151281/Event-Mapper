@@ -1,30 +1,36 @@
 <% layout("/layouts/boilerplate") %>
-<div class="row mt-3 vh-100">
-  <div class="col-6 offset-3">
-    <h1 class="fw-bold mt-5 pt-5">Login</h1>
+<div class="row mt-3">
+  <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+    <h1 class="fw-bold mt-5 h3">Log in</h1>
     <form action="/login" method="POST" class="needs-validation" novalidate>
       <div class="mb-3">
-        <lable for="username" class="form-label">Username</lable>
+        <label for="username" class="form-label">Username</label>
         <input
           name="username"
           id="username"
           type="text"
+          autocomplete="username"
           class="form-control"
           required
         />
         <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3 mt-3">
-        <lable for="password" class="form-label">password</lable>
+        <label for="password" class="form-label">Password</label>
         <input
           name="password"
           id="password"
           type="password"
+          autocomplete="current-password"
           class="form-control"
           required
         />
       </div>
-      <button class="btn form-control text-white fw-bold" style="background-color: #1c2331;">Login</button>
+      <button class="btn form-control text-white fw-bold btn-brand-dark">Log in</button>
     </form>
+    <p class="mt-3 mb-5">
+      New here? <a href="/signup" rel="nofollow">Create an account</a> or
+      <a href="/listings">browse events</a> first.
+    </p>
   </div>
 </div>

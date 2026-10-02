@@ -1,6 +1,22 @@
 # Event Mapper
 Event Mapper is a simple and powerful platform for hosting and managing events. It has an easy-to-use interface and strong backend support, ensuring a smooth experience for both hosts and guests. Real-time updates and a responsive design make it a reliable choice for event management.
 
+**Live site:** https://event-mapper.vercel.app
+
+## Running locally
+
+```bash
+npm install
+npm start          # http://localhost:8080
+```
+
+Required environment variables in `.env`: `ATLASDB_URL`, `SECRET`, `MAP_TOKEN`,
+`CLOUD_NAME`, `CLOUD_API_KEY`, `CLOUD_API_SECRET`.
+
+In production also set `NODE_ENV=production` and `SITE_URL` (the public origin,
+no trailing slash) — see [docs/SEO.md](docs/SEO.md), which documents the SEO
+setup, the two steps that still need your Google account, and the backlink plan.
+
 ## Key Features
 
 - **User Authentication**: Allow users to register and log in. Option for "Guest Login" to access limited features.

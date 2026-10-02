@@ -110,11 +110,6 @@ body {
   padding: 0;
 }
 
-#map {
-  height: 400px;
-  width: 80vh;
-}
-
 .filter{
     height: 3.8rem;
     text-align: center;
@@ -160,65 +155,33 @@ body {
 
 
 
-@media (max-width: 769px){
-  .show-body{
-      display: flex !important;
-      flex-direction: column;
-      align-items: center;
-      min-width: 420px;
-      width: 100% !important;
-      margin: none;
-      padding: none;
+/* The old rules here pinned `.show-body` to min-width:420px and `.container`
+   to max-width:450px below 769px. On a 360-390px phone that forced a
+   horizontal scrollbar and clipped content, and on a tablet it squeezed the
+   whole layout into a 450px column. Bootstrap's own grid handles both. */
+@media (max-width: 768.98px) {
+  .show-body {
+      width: 100%;
   }
-  @media (max-width: 425px){
-      .show-body {
-          min-width: 320px;
-      }
-  
+  .show-body > div {
+      width: 100%;
   }
-  .show-body>div{
-      width: 100% !important  ;
-  }
-  .offset-2{
-      margin-left: 0px !important;
-  }
-  .container{
-      display: flex !important;
-      flex-direction: column;
-      align-items: center;
-      margin: 0px auto !important;
-      max-width: 450px !important;
-  }
-  }
-  @media (max-width: 568px) {
-      .show-card-img{
-          height: 280px;
-      }
-  }
-  .card-body{
-      display: flex;
-      flex-direction: column;
-  }
-  .card-body>p{
-      margin-bottom: 0.6rem;
-  }
+}
 
-  .btns{
-    display: block !important;
-    height: 3rem !important;
-}.edit-btn, .del-btn{
-    display: inline;
-    width: 5rem !important;
-    /* margin: 10px !important; */
-}.del-btn{
-    display: inline !important;
+@media (max-width: 568px) {
+  .show-card-img {
+      height: 280px;
+  }
 }
-.btns-edit{
+
+.card-body{
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    max-width: 50px !important;
+    flex-direction: column;
 }
+.card-body>p{
+    margin-bottom: 0.6rem;
+}
+
 @media (min-width: 991px) {
     .review-main{
         display: flex;
@@ -232,28 +195,29 @@ body {
         max-height: fit-content !important;
     }
 }
+.review-lg{
+    position: relative;
+}
 .review-del{
     position: absolute;
     right: 20px;
     top: 8px;
 }
-.card-title , .card-text{
+/* Scoped to review cards. Unscoped, this forced every card title on the
+   listings grid and dashboard onto one inline run with the body text. */
+.review-card .card-title{
     display: inline !important;
-}
-.card-title{
-    width: 6rem;
     margin-right: 10px;
 }
+.review-card .card-text{
+    display: inline !important;
+}
 .review-comment{
-    max-width: 80vw;
+    overflow-wrap: anywhere;
 }
 
 /*  */
 @media (max-width: 768px) {
-  .edit-btn {
-      width: 4rem !important;
-  }
-
   .category-choose {
       display: none;
   }
@@ -263,10 +227,8 @@ body {
   }
 
   .mapImg {
-      /* padding: none; */
       padding-left: 0 !important;
       padding-right: 0 !important;
-      margin-top: -2rem !important;
   }
 }
 
@@ -391,4 +353,127 @@ body {
   .card-text {
       margin-left: 15px;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Navbar search (moved out of an inline <style> in navbar.ejs so it is
+   cached once instead of re-sent inside every HTML response).
+   ------------------------------------------------------------------------ */
+.search-btn {
+  background-color: #fe424d;
+  color: #fff;
+  border-radius: 25px;
+  padding: 0 1rem;
+  white-space: nowrap;
+}
+
+.search-btn:hover {
+  background-color: #e23944;
+  color: #fff;
+}
+
+.search-btn i {
+  display: inline;
+  margin-right: 0.5rem;
+  font-size: 1rem;
+}
+
+.search-inp {
+  border-radius: 25px;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+}
+
+.brand-text {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #222;
+}
+
+/* The navbar is fixed at 5rem, which clipped the expanded mobile menu. */
+.navbar {
+  height: auto;
+  min-height: 5rem;
+}
+
+@media (max-width: 767.98px) {
+  .navbar-collapse {
+    padding-bottom: 0.75rem;
+  }
+  .navbar-nav .search-inp {
+    width: 100%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Footer
+   ------------------------------------------------------------------------ */
+.site-footer {
+  background-color: #1c2331;
+}
+
+.footer-social {
+  background-color: #fe424d;
+}
+
+.footer-social-icons i {
+  font-size: 1.2rem;
+}
+
+.footer-heading {
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.footer-rule {
+  width: 60px;
+  background-color: #7c4dff;
+  height: 2px;
+  opacity: 1;
+  border: 0;
+}
+
+.footer-legal {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.btn-brand-dark {
+  background-color: #1c2331;
+}
+
+.btn-brand-dark:hover {
+  background-color: #2a3448;
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------------------
+   Accessibility + layout safety
+   ------------------------------------------------------------------------ */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1080;
+  padding: 0.75rem 1rem;
+  background: #1c2331;
+  color: #fff;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+.breadcrumb-nav a {
+  color: #555;
+}
+
+/* Nothing should be able to push the page wider than the viewport. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
 }
