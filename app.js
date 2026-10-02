@@ -196,11 +196,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-const port = 8080;
-server.listen(port, () => {
-  console.log(`server is listening on port ${port}`);
-});
-
 io.on("connection", (socket) => {
   console.log("New client connected");
 
@@ -208,3 +203,15 @@ io.on("connection", (socket) => {
     console.log("Client disconnected");
   });
 });
+
+// On Vercel the platform invokes the exported handler itself, so binding a
+// port there would fail. Only listen when running as a normal long-lived
+// process (local dev, Render, a container).
+if (!process.env.VERCEL) {
+  const port = process.env.PORT || 8080;
+  server.listen(port, () => {
+    console.log(`server is listening on port ${port}`);
+  });
+}
+
+module.exports = app;
